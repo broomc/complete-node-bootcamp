@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon server.js",
+    "start": "nodemon server.js",
     "start:prod": "cross-env NODE_ENV=production nodemon server.js"
   },
   "author": "Clive Broom",
@@ -13,7 +13,9 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "mongo": "^0.1.0",
     "mongodb": "^6.12.0",
+    "mongoose": "^5.13.23",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
