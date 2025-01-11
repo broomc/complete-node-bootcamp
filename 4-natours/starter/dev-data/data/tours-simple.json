@@ -30,7 +30,6 @@
     "startDates": ["2021-06-19,10:00", "2021-07-20,10:00", "2021-08-18,10:00"]
   },
   {
-    "id": 2,
     "name": "The Snow Adventurer",
     "duration": 4,
     "maxGroupSize": 10,
@@ -133,7 +132,5 @@
     "imageCover": "tour-9-cover.jpg",
     "images": ["tour-9-1.jpg", "tour-9-2.jpg", "tour-9-3.jpg"],
     "startDates": ["2021-12-16,10:00", "2022-01-16,10:00", "2022-12-12,10:00"]
-  },
-  { "id": 9, "name": "test tour", "duration": 10, "difficulty": "easy" },
-  { "id": 10, "name": "test tour test", "duration": 5, "difficulty": "easy" }
+  }
 ]
