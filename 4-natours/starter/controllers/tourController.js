@@ -1,68 +1,29 @@
 const Tour = require('../models/tourModel');
+const APIFeatures = require('../utils/apiFeatures');
 
 /* const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 ); */
 
 //ROUT HANDLERS
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage,price';
+  req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+  next();
+};
+
 exports.getAllTours = async (req, res) => {
   try {
     console.log(req.query);
-    //BUILD QUERY
-    // 1) Filtering
-    const queryObj = { ...req.query };
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    excludedFields.forEach((el) => delete queryObj[el]);
-
-    // 2) Advanced Filtering
-    let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    //console.log(JSON.parse(queryStr));
-    //console.log(req.query, queryObj);
-
-    //BUILD QUERY OPTION 1
-    //const tours = await Tour.find({ duration: 5, difficulty: 'easy' });
-
-    //gets all results
-    let query = Tour.find(JSON.parse(queryStr));
-
-    //console.log(query);
-
-    //BUILD QUERY OPTION 2 - ALTERNATIVE
-    //const tours = await Tour.find()
-    //  .where('duration')
-    //  .equals(5)
-    //  .where('difficulty')
-    // .equals('easy');
-
-    //2) SORTING
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(' ');
-      console.log(sortBy);
-      query = query.sort(sortBy);
-      //sort('price ratingsAverage')
-    } else {
-      query = query.sort('-createdAt');
-    }
-
-    //3) FIELD LIMITING
-    if (req.query.fields) {
-      const fields = req.query.fields.split(',').join(' ');
-      console.log(fields);
-      query = query.select(fields);
-    } else {
-      query = query.select('-__v');
-    }
-
-    //4) PAGINATION
-    const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 100;
-    const skip = (page - 1) * limit;
-    //page=2&limit-=10, page 1 = 11-20, page 2 = 21-30
-    query = query.skip(skip).limit(limit);
 
     //EXECUTE QUERY
-    const tours = await query;
+    const features = new APIFeatures(Tour.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const tours = await features.query;
     //console.log(tours);
 
     //SEND RESPONSE
